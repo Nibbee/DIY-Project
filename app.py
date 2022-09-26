@@ -11,4 +11,4 @@ api.add_resource(InstructionResource, '/instructions/<int:instruction_id>')
 api.add_resource(InstructionPublishResource, '/instructions/<int:instruction_id>/publish')
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=3000, debug=True)
