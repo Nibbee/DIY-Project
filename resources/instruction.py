@@ -35,7 +35,8 @@ class InstructionListResource(Resource):
 class InstructionResource(Resource):
 
     def get(self, instruction_id):
-        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id and instruction.is_publish == True), None)
+        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id and
+                            instruction.is_publish == True), None)
 
         if instruction is None:
             return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
@@ -70,14 +71,9 @@ class InstructionPublishResource(Resource):
         if instruction is None:
             return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
 
-        instruction.name = data['name']
-        instruction.description = data['description']
-        instruction.steps = data['steps']
-        instruction.tools = data['tools']
-        instruction.cost = data['cost']
-        instruction.duration = data['duration']
+        instruction.is_publish = True
 
-        return instruction.data, HTTPStatus.OK
+        return instruction.data, HTTPStatus.NO_CONTENT
 
     def delete(self, instruction_id):
         instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)

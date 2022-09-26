@@ -19,7 +19,7 @@ class Instruction:
         self.tools = tools
         self.cost = cost
         self.duration = duration
-        self.is_publish = False
+        self.is_publish = True
 
     @property
     def data(self):
