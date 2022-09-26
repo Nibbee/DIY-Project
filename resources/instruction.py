@@ -66,7 +66,7 @@ class InstructionResource(Resource):
         if instruction is None:
             return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
 
-        instruction.is_publish = False
+        instructions_list.remove(instruction)
 
         return {}, HTTPStatus.NO_CONTENT
 
