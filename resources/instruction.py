@@ -42,6 +42,23 @@ class InstructionResource(Resource):
 
         return instruction.data, HTTPStatus.OK
 
+    def put(self, instruction_id):
+        data = request.get_json()
+
+        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
+
+        if instruction is None:
+            return {'message': 'instruction not found'}, HTTPStatus.NOT_FOUND
+
+        instruction.name = data['name']
+        instruction.description = data['description']
+        instruction.steps = data['steps']
+        instruction.tools = data['tools']
+        instruction.cost = data['cost']
+        instruction.duration = data['duration']
+
+        return instruction.data, HTTPStatus.OK
+
 
 class InstructionPublishResource(Resource):
 
@@ -62,8 +79,7 @@ class InstructionPublishResource(Resource):
 
         return instruction.data, HTTPStatus.OK
 
-    @staticmethod
-    def delete(instruction_id):
+    def delete(self, instruction_id):
         instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
 
         if instruction is None:
