@@ -59,12 +59,11 @@ class InstructionResource(Resource):
         instruction.duration = data['duration']
 
         return instruction.data, HTTPStatus.OK
-
+    
 
 class InstructionPublishResource(Resource):
 
     def put(self, instruction_id):
-        data = request.get_json()
 
         instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
 
