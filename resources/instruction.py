@@ -59,7 +59,17 @@ class InstructionResource(Resource):
         instruction.duration = data['duration']
 
         return instruction.data, HTTPStatus.OK
-    
+
+    def delete(self, instruction_id):
+        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
+
+        if instruction is None:
+            return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
+
+        instruction.is_publish = False
+
+        return {}, HTTPStatus.NO_CONTENT
+
 
 class InstructionPublishResource(Resource):
 
@@ -72,7 +82,7 @@ class InstructionPublishResource(Resource):
 
         instruction.is_publish = True
 
-        return instruction.data, HTTPStatus.NO_CONTENT
+        return {}, HTTPStatus.NO_CONTENT
 
     def delete(self, instruction_id):
         instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
