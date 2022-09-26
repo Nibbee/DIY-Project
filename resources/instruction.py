@@ -35,7 +35,7 @@ class InstructionListResource(Resource):
 class InstructionResource(Resource):
 
     def get(self, instruction_id):
-        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id and
+        instruction = next((instruction for instruction in instructions_list if instruction.id == instruction_id and
                             instruction.is_publish == True), None)
 
         if instruction is None:
@@ -46,7 +46,7 @@ class InstructionResource(Resource):
     def put(self, instruction_id):
         data = request.get_json()
 
-        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
+        instruction = next((instruction for instruction in instructions_list if instruction.id == instruction_id), None)
 
         if instruction is None:
             return {'message': 'instruction not found'}, HTTPStatus.NOT_FOUND
@@ -61,7 +61,7 @@ class InstructionResource(Resource):
         return instruction.data, HTTPStatus.OK
 
     def delete(self, instruction_id):
-        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
+        instruction = next((instruction for instruction in instructions_list if instruction.id == instruction_id), None)
 
         if instruction is None:
             return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
@@ -75,7 +75,7 @@ class InstructionPublishResource(Resource):
 
     def put(self, instruction_id):
 
-        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
+        instruction = next((instruction for instruction in instructions_list if instruction.id == instruction_id), None)
 
         if instruction is None:
             return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
@@ -85,7 +85,7 @@ class InstructionPublishResource(Resource):
         return {}, HTTPStatus.NO_CONTENT
 
     def delete(self, instruction_id):
-        instruction = next((instruction for instruction in instructions_list if instruction_id == instruction_id), None)
+        instruction = next((instruction for instruction in instructions_list if instruction.id == instruction_id), None)
 
         if instruction is None:
             return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
