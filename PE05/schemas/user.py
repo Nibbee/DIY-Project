@@ -1,7 +1,3 @@
-from importlib.metadata import requires
-import re
-from typing_extensions import OrderedDict, Required
-from urllib import request
 from marshmallow import Schema, fields
 from utils import hash_password
 
