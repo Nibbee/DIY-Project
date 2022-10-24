@@ -1,10 +1,15 @@
+from distutils import errors
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import get_jwt_identity, jwt_required, jwt_optional
 from http import HTTPStatus
 
-
 from models.instruction import Instruction
+
+from schemas.instruction import InstructionSchema
+
+instruction_schema = InstructionSchema
+instruction_list_schema = InstructionSchema(many=True)
 
 class InstructionListResource(Resource):
 
@@ -12,12 +17,7 @@ class InstructionListResource(Resource):
 
         instructions = Instruction.get_all_published()
 
-        data = []
-
-        for instruction in instructions:
-            data.append(instruction.data)
-
-        return {'data': data}, HTTPStatus.OK
+        return instruction_list_schema.dump(instructions).data, HTTPStatus.OK
 
     @jwt_required
     def post(self):
@@ -25,16 +25,16 @@ class InstructionListResource(Resource):
 
         current_user = get_jwt_identity()
 
-        instruction = Instruction(name=json_data['name'],
-                                  description=json_data['description'],
-                                  steps=json_data['steps'],
-                                  tools=json_data['tools'],
-                                  cost=json_data['cost'],
-                                  duration=json_data['duration'])
+        data, errors = instruction_schema.load(data=json_data)
 
+        if errors:
+            return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
+
+        instruction = Instruction(**data)
+        instruction.user_id = current_user
         instruction.save()
 
-        return instruction.data, HTTPStatus.CREATED
+        return instruction_schema.dump(instruction).data, HTTPStatus.CREATED
 
 
 class InstructionResource(Resource):
