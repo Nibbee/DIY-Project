@@ -8,7 +8,7 @@ from models.instruction import Instruction
 
 from schemas.instruction import InstructionSchema
 
-instruction_schema = InstructionSchema
+instruction_schema = InstructionSchema()
 instruction_list_schema = InstructionSchema(many=True)
 
 class InstructionListResource(Resource):
@@ -99,23 +99,38 @@ class InstructionResource(Resource):
 
 class InstructionPublishResource(Resource):
 
+    @jwt_required
     def put(self, instruction_id):
 
-        instruction = next((instruction for instruction in instructions_list if instruction.id == instruction_id), None)
+        instruction = Instruction.get_by_id(instruction_id=instruction_id)
 
         if instruction is None:
             return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
 
+        current_user = get_jwt_identity()
+
+        if current_user != instruction.user_id:
+            return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
+
         instruction.is_publish = True
+        instruction.save()
 
         return {}, HTTPStatus.NO_CONTENT
 
+    @jwt_required
     def delete(self, instruction_id):
-        instruction = next((instruction for instruction in instructions_list if instruction.id == instruction_id), None)
+
+        instruction = Instruction.get_by_id(instruction_id=instruction_id)
 
         if instruction is None:
-            return {"message": "instruction not found"}, HTTPStatus.NOT_FOUND
+            return {'message': 'Instruction not found'}, HTTPStatus.NOT_FOUND
+
+        current_user = get_jwt_identity()
+
+        if current_user != instruction.user_id:
+            return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
         instruction.is_publish = False
+        instruction.save()
 
         return {}, HTTPStatus.NO_CONTENT
