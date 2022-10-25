@@ -8,7 +8,7 @@ from models.user import User
 
 from resources.instruction import InstructionListResource, InstructionResource, InstructionPublishResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
-from resources.user import UserListResource, UserResource, MeResource
+from resources.user import UserListResource, UserResource, MeResource, UserInstructionListResource
 
 
 def create_app():
@@ -37,6 +37,7 @@ def register_resources(app):
 
     api.add_resource(UserListResource, '/users')
     api.add_resource(UserResource, '/users/<string:username>')
+    api.add_resource(UserInstructionListResource, '/users/<string:username>/instructions')
 
     api.add_resource(TokenResource, '/token')
     api.add_resource(RefreshResource, '/refresh')

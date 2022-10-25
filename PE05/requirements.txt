@@ -7,3 +7,4 @@ psycopg2-binary==2.9.3
 passlib==1.7.4
 Flask-JWT-Extended==3.7.0
 Marshmallow==2.19.5
+webargs==5.4.0
