@@ -4,17 +4,21 @@ from website.models.user import User
 from website.models.post import Post
 from website.models.comment import Comment
 from website.models.like import Like
-from website import db
+from website.config import db
 
 views = Blueprint("views", __name__)
 
-
 @views.route("/")
 @views.route("/home")
-@login_required
 def home():
+    return render_template('home.html', user=current_user)
+
+
+@views.route("/posts_div.html")
+@login_required
+def post():
     posts = Post.query.all()
-    return render_template("home.html", user=current_user, posts=posts)
+    return render_template("posts_div.html", user=current_user, posts=posts)
 
 
 @views.route("/create-post", methods=['GET', 'POST'])
@@ -42,7 +46,7 @@ def delete_post(id):
 
     if not post:
         flash("Post does not exist.", category='error')
-    elif current_user.id != post.id:
+    elif current_user.id != post.author:
         flash('You do not have permission to delete this post.', category='error')
     else:
         db.session.delete(post)
