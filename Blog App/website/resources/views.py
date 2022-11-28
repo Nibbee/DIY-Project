@@ -15,7 +15,6 @@ def home():
 
 
 @views.route("/posts_div.html")
-@login_required
 def post():
     posts = Post.query.all()
     return render_template("posts_div.html", user=current_user, posts=posts)
